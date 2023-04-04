@@ -1,0 +1,97 @@
+1.
+create function fn_Timhang(@masp nvarchar(10))
+returns nvarchar(20)
+as
+begin
+declare @ten nvarchar(20)
+set @ten = (select tenhang from hangsx inner join sanpham
+on hangsx.mahangsx = sanpham.mahangsx
+where masp = @masp)
+return @ten
+end
+
+go
+select dbo.fn_Timhang('SP03')
+
+2.
+create function fn_thongkenhaptheonam(@x int,@y int)
+returns int
+as
+begin
+declare @tongtien int
+select @tongtien = sum(soluongN*dongiaN)
+from Nhap
+where year(Ngaynhap) between @x and @y
+return @tongtien
+end
+
+drop function fn_thongkenhaptheonam
+
+go
+select dbo.fn_thongkenhaptheonam('2019','2020')
+
+4.
+create function fn_thongkenhaptheongay(@x int,@y int)
+returns int
+as
+begin
+declare @tongtien int
+select @tongtien = sum(soluongN*dongiaN)
+from Nhap
+where day(Ngaynhap) between @x and @y
+return @tongtien
+end
+
+drop function fn_thongkenhaptheongay
+
+go
+select dbo.fn_thongkenhaptheongay('07','22')
+
+6.
+create function fn_Thongkesoluongnhanvien(@Phong nvarchar(10))
+returns int
+as
+begin
+declare @ten nvarchar(20)
+select @ten = count(NV.Phong)
+from Nhanvien NV
+where NV.Phong = @Phong
+return @ten
+end
+
+drop function fn_Thongkesoluongnhanvien
+
+go
+select dbo.fn_Thongkesoluongnhanvien('Kế toán')
+
+8.
+create function fn_Sodtnhanvien(@sohd nvarchar(20))
+returns nvarchar(20)
+as
+begin
+declare @sdt nvarchar(20)
+select @sdt = count(NV.Sodt)
+from Nhanvien NV
+where NV.Sodt = @sohd
+return @sdt
+end
+
+drop function fn_Sodtnhanvien
+
+select dbo_Sodtnhanvien('N01')
+
+10.
+CREATE FUNCTION fn_Thongkesoluongsp(@Tenhang nvarchar(10))
+RETURNS int
+AS 
+BEGIN
+	DECLARE @tongtien int = 0
+	SELECT @tongtien = count(*) FROM (
+        SELECT Hangsx.mahangsx
+        FROM Sanpham,Hangsx
+        WHERE Hangsx.mahangsx=Hangsx.Mahangsx and Hangsx.Tenhang=@Tenhang
+        GROUp BY Hangsx.mahangsx
+        HAVING SUM(Sanpham.mahangsx)
+    ) AS Temp
+    RETURN @tongtien
+END
