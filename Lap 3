@@ -1,0 +1,71 @@
+1.
+select Hangsx.tenhang, count(Sanpham.masp) as so_luong_sp
+from Hangsx
+join Sanpham on Hangsx.mahangsx = Sanpham.mahangsx
+group Hangsx.tenhang
+2.
+select masp, sum(soluongN * dongiaN) as TongTienNhap
+from Nhap
+where year(ngaynhap) = 2020
+group by masp;
+3.
+select Sanpham.masp, Sanpham.tensp, sum(Xuat.soluongX) as tong_soluong_xuat
+from Sanpham
+join Xuat on Sanpham.masp = Xuat.masp
+join Hangsx on Sanpham.mahangsx = Hangsx.mahangsx
+where year(Xuat.ngayxuat) = 2018 AND Hangsx.tenhang = 'Samsung'
+group by Sanpham.masp, Sanpham.tensp
+having sum(Xuat.soluongX) > 10000;
+4.
+select phong, COUNT(*) AS SoLuongNam
+from Nhanvien
+where gioitinh = 'Nam'
+group by phong
+5.
+select Hangsx.tenhang, sum(Nhap.soluongN) as TongSoLuongNhap
+from Nhap
+join Sanpham on Nhap.masp = Sanpham.masp
+join Hangsx on Sanpham.mahangsx = Hangsx.mahangsx
+where year(Nhap.ngaynhap) = 2018
+group by Hangsx.tenhang
+6.
+select Nhanvien.manv, Nhanvien.tennv, sum(Xuat.soluongX * Sanpham.giaban) AS tongtienxuat
+from Xuat
+inner join Sanpham on Xuat.masp = Sanpham.masp
+INNER JOIN Nhanvien on Xuat.manv = Nhanvien.manv
+where year(Xuat.ngayxuat) = 2018
+group by Nhanvien.manv, Nhanvien.tennv
+7.
+select manv, sum(soluongN * dongiaN) as tong_tien_nhap
+from Nhap
+where month(ngaynhap) = 8 and year(ngaynhap) = 2018
+group by manv
+having sum(soluongN * dongiaN) > 100000;
+8.
+select SP.masp, SP.tensp
+from Sanpham SP
+left join Nhap N on SP.masp = N.masp
+left join Xuat X on SP.masp = X.masp
+where N.soluongN is not null and X.masp is null
+group by SP.masp, SP.tensp
+9.
+select SP.masp, SP.tensp
+from Sanpham SP
+left join Nhap N on SP.masp = N.masp
+left join Xuat X on SP.masp = X.masp
+where year(Ngaynhap) = 2020 and year(NGAYXUAT) = 2020
+group by SP.masp, SP.tensp
+10.
+select NV.Manv, Tennv
+from Nhanvien NV
+left join Nhap N on NV.Manv = N.Manv
+left join Xuat X on NV.Manv = X.Manv
+where soluongN is not null and soluongX  is not null
+group by NV.MANV, NV.TENNV
+11.
+select NV.Manv, Tennv
+from Nhanvien NV
+left join Nhap N on NV.Manv = N.Manv
+left join Xuat X on NV.Manv = X.Manv
+where soluongN is not null and soluongX  is null
+group by NV.Manv, NV.Tennv
