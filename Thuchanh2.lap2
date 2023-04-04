@@ -41,4 +41,43 @@ order by giaban desc;
 10.
 select * from Sanpham
 join Hangsx ON Sanpham.mahangsx = Hangsx.mahangsx
-WHERE Hangsx.tenhang = 'Samsung' AND Sanpham.giaban >= 100000 AND Sanpham.giaban <= 500000
+where Hangsx.tenhang = 'Samsung' AND Sanpham.giaban >= 100000 AND Sanpham.giaban <= 500000
+11.
+select sum(SoLuongN*DonGian) as TongTienNhap
+from Nhap
+inner join SanPham on Nhap.MaSP = SanPham.MaSP
+inner join HangSX on SanPham.MaHangSX = HangSX.MaHangSX
+where HangSX.TenHang = 'Samsung' and year(NgayNhap) = 2018
+12.
+select sum(Xuat.SoLuongX*SanPham.GiaBan) as tongtienxuat
+from Xuat
+inner join SanPham on Xuat.MaSP = SanPham.MaSP
+where NgayXuat = '2-9-2018'
+13.
+select SoHDN, NgayNhap, Nhap.SoLuongN*Nhap.DonGian as TienNhap
+from Nhap
+where year(NgayNhap) = 2018
+14.
+select top  10  sum(Nhap.SoLuongN), SanPham.MaSP,SanPham.TenSP
+from Nhap
+inner join SanPham on SanPham.MaSP=Nhap.MaSP 
+where year(NgayNhap)=2019
+group by SanPham.MaSP, SanPham.TenSP
+order by sum(Nhap.SoLuongN) desc
+15.
+select sp.MaSP, sp.TenSP
+from SanPham sp
+inner join HangSX hsx on sp.MaHangSX = hsx.MaHangSX
+inner join Nhap n on sp.MaSP = n.MaSP
+inner join NhanVien nv on n.MaNV = nv.MaNV
+WHERE hsx.TenHang = 'samsung' and nv.MaNV = 'NV01'
+16.
+select Nhap.SoHDN, Nhap.MaSP, Nhap.SoLuongN, Nhap.NgayNhap
+from Nhap
+join Xuat on Nhap.MaSP = Xuat.MaSP
+where Nhap.MaSP = 'SP02' and Xuat.MaNV = 'NV02';
+17.
+select distinct NV.MaNV, NV.TenNV, X.SoLuongX 
+from NhanVien NV 
+inner join Xuat X on NV.MaNV = X.MaNV 
+where X.NgayXuat = '2020-02-03' and X.MaSP = 'SP02'
